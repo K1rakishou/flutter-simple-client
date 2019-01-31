@@ -1,0 +1,2 @@
+
+class RemoteSourceException implements Exception {}

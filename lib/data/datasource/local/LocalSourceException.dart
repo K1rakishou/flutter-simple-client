@@ -1,0 +1,2 @@
+
+class LocalSourceException implements Exception {}
