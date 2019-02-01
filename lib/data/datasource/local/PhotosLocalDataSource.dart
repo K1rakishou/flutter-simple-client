@@ -3,18 +3,18 @@ import 'package:flutter_simple_client/data/Photo.dart';
 import 'package:flutter_simple_client/data/datasource/PhotosDataSource.dart';
 import 'package:flutter_simple_client/data/datasource/local/AbstractLocalSource.dart';
 
-class PhotosLocalDataSource extends PhotosDataSource with AbstractLocalSource {
+class PhotosLocalDataSource extends PhotosDataSource with AbstractLocalSource<Photo> {
 
   @override
-  Future<bool> storeEntities(List entities) {
+  Future<bool> storeEntities(List<Photo> entities) async {
     assert (entities != null);
 
     // TODO: implement storeEntities
-    return null;
+    return true;
   }
 
   @override
-  Future<List<Photo>> getPageOfPhotos(int lastPhotoId, int count) {
+  Future<List<Photo>> getPageOfPhotos(int lastPhotoId, int count) async {
     assert (lastPhotoId != null);
     assert (count != null);
 
@@ -23,7 +23,7 @@ class PhotosLocalDataSource extends PhotosDataSource with AbstractLocalSource {
   }
 
   @override
-  Future<Function> cleanUpOld() {
+  Future<void> cleanUpOld() async {
     // TODO: implement cleanUpOld
     return null;
   }

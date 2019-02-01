@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_simple_client/core/Page.dart';
-import 'package:flutter_simple_client/data/Photo.dart';
 import 'package:flutter_simple_client/data/repository/PhotosRepository.dart';
 import 'package:flutter_simple_client/features/PhotosEvent.dart';
 import 'package:flutter_simple_client/features/PhotosState.dart';
@@ -14,8 +12,8 @@ class PhotosBloc extends Bloc<PhotosEvent, PhotosState> {
   PhotosState get initialState => PhotosState.initial();
 
   @override
-  Stream<PhotosState> mapEventToState(PhotosState currentState,
-      PhotosEvent event) async* {
+  Stream<PhotosState> mapEventToState(
+      PhotosState currentState, PhotosEvent event) async* {
     if (event is LoadNextPageOfPhotosEvent) {
       yield await _loadNextPageOfPhotos(currentState);
     }
@@ -36,10 +34,10 @@ class PhotosBloc extends Bloc<PhotosEvent, PhotosState> {
       }
 
       final nextPage = await _photosRepository.getPageOfPhotos(lastPhotoId);
-      return PhotosState.success(currentState.photos + nextPage.data, nextPage.isEnd);
-    } catch (e) {
-      return PhotosState.error(currentState.photos, e as Exception);
+      return PhotosState.success(
+          currentState.photos + nextPage.data, nextPage.isEnd);
+    } on Exception catch (e) {
+      return PhotosState.error(currentState.photos, e);
     }
   }
-
 }

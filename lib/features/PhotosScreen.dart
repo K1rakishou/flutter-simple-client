@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_client/Constants.dart';
 import 'package:flutter_simple_client/data/Photo.dart';
 import 'package:flutter_simple_client/features/PhotosBlock.dart';
 import 'package:flutter_simple_client/features/PhotosState.dart';
@@ -68,8 +69,7 @@ class _PhotosScreenState extends State<PhotosScreen> {
 
   Widget _buildWidgetError(Exception exception) {
     return Text(
-        'An error has occurred while trying to load a page of photos. Error details: ${exception.toString()}'
-    );
+        'An error has occurred while trying to load a page of photos. Error details: $exception');
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
@@ -90,18 +90,18 @@ class _PhotosScreenState extends State<PhotosScreen> {
   }
 
   Widget _buildLoaderListItem() {
-    return Center(
-      child: CircularProgressIndicator(),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: Center(
+        child: CircularProgressIndicator(),
+      )
     );
   }
 
   Widget _buildDataListItem(Photo photo) {
     return Card(
       elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image.network(photo.photoName),
-      ),
+      child: Image.network(Constants.getPhotoFileUrl + '/' + photo.photoName),
     );
   }
 }

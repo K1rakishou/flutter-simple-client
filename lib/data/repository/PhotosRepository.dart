@@ -41,6 +41,6 @@ class PhotosRepository {
     }
 
     //and return it
-    return Page(freshPhotos, freshPhotos.length == photosPerPage);
+    return Page(freshPhotos, freshPhotos.length < photosPerPage);
   }
 }

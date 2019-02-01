@@ -39,7 +39,12 @@ Icon?
 /Flutter/App.framework
 /Flutter/Flutter.framework
 /Flutter/Generated.xcconfig
+/Flutter/Generated.xcworkspace
 /ServiceDefinitions.json
+/Runner.xcodeproj
+/Flutter/AppFrameworkInfo.plist
+/Runner.xcworkspace/contents.xcworkspacedata
+
 
 Pods/
 .symlinks/
