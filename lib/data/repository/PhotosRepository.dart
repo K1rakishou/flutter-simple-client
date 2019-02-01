@@ -15,6 +15,8 @@ class PhotosRepository {
       int lastPhotoId) async {
     assert (lastPhotoId != null);
 
+    //TODO: check internet connection before cleaning up the cache
+
     //cleanup old cached photos before fetching new
     await photosLocalDataSource.cleanUpOld();
 
@@ -23,7 +25,7 @@ class PhotosRepository {
         await photosLocalDataSource.getPageOfPhotos(lastPhotoId, photosPerPage);
     if (cachedPhotos != null && cachedPhotos.length == photosPerPage) {
       //if we have - return cached data
-      return new Page(cachedPhotos, false);
+      return Page(cachedPhotos, false);
     }
 
     //otherwise fetch fresh data

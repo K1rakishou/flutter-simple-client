@@ -52,10 +52,15 @@ class _PhotosScreenState extends State<PhotosScreen> {
         child: CircularProgressIndicator(),
       );
     } else {
+      final crossAxisCount =
+          MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 4;
+
       return NotificationListener<ScrollNotification>(
         onNotification: _handleScrollNotification,
-        child: ListView.builder(
+        child: GridView.builder(
           itemCount: calculateListItemCount(state),
+          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount),
           controller: _scrollController,
           itemBuilder: (context, index) {
             return index >= state.photos.length
@@ -68,8 +73,11 @@ class _PhotosScreenState extends State<PhotosScreen> {
   }
 
   Widget _buildWidgetError(Exception exception) {
-    return Text(
-        'An error has occurred while trying to load a page of photos. Error details: $exception');
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Text(
+          'An error has occurred while trying to load a page of photos. Error details: $exception'),
+    );
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
@@ -91,11 +99,10 @@ class _PhotosScreenState extends State<PhotosScreen> {
 
   Widget _buildLoaderListItem() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Center(
-        child: CircularProgressIndicator(),
-      )
-    );
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ));
   }
 
   Widget _buildDataListItem(Photo photo) {
