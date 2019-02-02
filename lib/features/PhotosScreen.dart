@@ -60,13 +60,14 @@ class _PhotosScreenState extends State<PhotosScreen> {
           child: RefreshIndicator(
             onRefresh: _refresh,
             child: GridView.builder(
-              itemCount: calculateListItemCount(state),
+              // length+ 1 for either "end of the list reached" text or for progress indicator
+              itemCount: state.photos.length + 1,
               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount),
               controller: _scrollController,
               itemBuilder: (context, index) {
                 return index >= state.photos.length
-                    ? _buildLoaderListItem()
+                    ? _buildLoaderListItem(state.isEndReached)
                     : _buildDataListItem(state.photos[index]);
               },
             ),
@@ -95,20 +96,21 @@ class _PhotosScreenState extends State<PhotosScreen> {
     return false;
   }
 
-  int calculateListItemCount(PhotosState state) {
-    if (state.isEndReached) {
-      return state.photos.length;
+  Widget _buildLoaderListItem(bool isEndReached) {
+    if (isEndReached) {
+      return GestureDetector(
+        onTap: () => _photosBloc.resetState(),
+        child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: Text('End of the list reached. Tap here to reload it.')),
+      );
     } else {
-      return state.photos.length + 1;
+      return Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: Center(
+            child: CircularProgressIndicator()
+          ));
     }
-  }
-
-  Widget _buildLoaderListItem() {
-    return Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: Center(
-          child: CircularProgressIndicator(),
-        ));
   }
 
   Widget _buildDataListItem(Photo photo) {
@@ -117,5 +119,4 @@ class _PhotosScreenState extends State<PhotosScreen> {
       child: Image.network(Constants.getPhotoFileUrl + '/' + photo.photoName),
     );
   }
-
 }
