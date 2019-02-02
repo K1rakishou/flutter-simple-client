@@ -16,6 +16,10 @@ class PhotosBloc extends Bloc<PhotosEvent, PhotosState> {
       PhotosState currentState, PhotosEvent event) async* {
     if (event is LoadNextPageOfPhotosEvent) {
       yield await _loadNextPageOfPhotos(currentState);
+    } else if (event is ResetStateEvent) {
+      final newState = PhotosState.initial();
+      yield newState;
+      yield await _loadNextPageOfPhotos(newState);
     }
   }
 
@@ -23,8 +27,12 @@ class PhotosBloc extends Bloc<PhotosEvent, PhotosState> {
     dispatch(LoadNextPageOfPhotosEvent());
   }
 
+  void resetState() {
+    dispatch(ResetStateEvent());
+  }
+
   Future<PhotosState> _loadNextPageOfPhotos(PhotosState currentState) async {
-    if (currentState.isEndReached) {
+    if (currentState.isEndReached || currentState.isError()) {
       return currentState;
     }
 

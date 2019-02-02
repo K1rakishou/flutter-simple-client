@@ -56,20 +56,26 @@ class _PhotosScreenState extends State<PhotosScreen> {
           MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 4;
 
       return NotificationListener<ScrollNotification>(
-        onNotification: _handleScrollNotification,
-        child: GridView.builder(
-          itemCount: calculateListItemCount(state),
-          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount),
-          controller: _scrollController,
-          itemBuilder: (context, index) {
-            return index >= state.photos.length
-                ? _buildLoaderListItem()
-                : _buildDataListItem(state.photos[index]);
-          },
-        ),
-      );
+          onNotification: _handleScrollNotification,
+          child: RefreshIndicator(
+            onRefresh: _refresh,
+            child: GridView.builder(
+              itemCount: calculateListItemCount(state),
+              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount),
+              controller: _scrollController,
+              itemBuilder: (context, index) {
+                return index >= state.photos.length
+                    ? _buildLoaderListItem()
+                    : _buildDataListItem(state.photos[index]);
+              },
+            ),
+          ));
     }
+  }
+
+  Future<void> _refresh() async {
+    _photosBloc.resetState();
   }
 
   Widget _buildWidgetError(Exception exception) {
@@ -111,4 +117,5 @@ class _PhotosScreenState extends State<PhotosScreen> {
       child: Image.network(Constants.getPhotoFileUrl + '/' + photo.photoName),
     );
   }
+
 }
