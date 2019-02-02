@@ -24,6 +24,10 @@ class PhotosBloc extends Bloc<PhotosEvent, PhotosState> {
   }
 
   Future<PhotosState> _loadNextPageOfPhotos(PhotosState currentState) async {
+    if (currentState.isEndReached) {
+      return currentState;
+    }
+
     try {
       var lastPhotoId = -1;
 
@@ -34,6 +38,7 @@ class PhotosBloc extends Bloc<PhotosEvent, PhotosState> {
       }
 
       final nextPage = await _photosRepository.getPageOfPhotos(lastPhotoId);
+
       return PhotosState.success(
           currentState.photos + nextPage.data, nextPage.isEnd);
     } on Exception catch (e) {
