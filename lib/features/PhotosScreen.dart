@@ -80,10 +80,12 @@ class _PhotosScreenState extends State<PhotosScreen> {
   }
 
   Widget _buildWidgetError(Exception exception) {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-          'An error has occurred while trying to load a page of photos. Error details: $exception'),
+    return GestureDetector(
+      onTap: () => _photosBloc.resetState(),
+      child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+              'An error has occurred while trying to load a page of photos:\n\nError details: $exception\n\nTap here to reload the list.')),
     );
   }
 
@@ -107,9 +109,7 @@ class _PhotosScreenState extends State<PhotosScreen> {
     } else {
       return Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0),
-          child: Center(
-            child: CircularProgressIndicator()
-          ));
+          child: Center(child: CircularProgressIndicator()));
     }
   }
 
